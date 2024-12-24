@@ -5,10 +5,10 @@ package academy.prog;
  */
 
 public class Utils {
-    private static final String URL = "http://127.0.0.1"; //пишем localHost(адрес) - IP для запуска сервера
-    private static final int PORT = 8080; //и порт, на котором сидит сервер
+    private static final String URL = "http://127.0.0.1"; //вказуємо localHost (адреса) - IP для запуску сервера
+    private static final int PORT = 8080; //та порт, на якому працює сервер
 
-    public static String getURL() { //метод для конкатенации URL and PORT - т.е. получаем полный URL
-        return URL + ":" + PORT;
-    } //с апомощью конкатенации возвращаем URL-адрес
+    public static String getURL() { //метод для конкатенації URL та PORT - тобто отримуємо повний URL
+        return URL + ":" + PORT; //за допомогою конкатенації повертаємо URL-адресу
+    }
 }
