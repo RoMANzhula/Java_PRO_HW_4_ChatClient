@@ -10,56 +10,56 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-public class Message { //класс Сообщение
-	private Date date = new Date(); //поле класса - дата создания сообщения
-	private String from; //поле класса - отправитель сообщения
-	private String to; //поле класса = получатель сообщения
-	private String text; //поле класса - текст сообщения
+public class Message { //клас "Повідомлення"
+	private Date date = new Date(); //поле класу - дата створення повідомлення
+	private String from; //поле класу - відправник повідомлення
+	private String to; //поле класу - отримувач повідомлення
+	private String text; //поле класу - текст повідомлення
 
-	public Message(String from, String to, String text) { //конструктор класса с параметрами(от кого, кому, содержимое)
-		this.from = from; //инициализация поля класса по аргументу созданного экземпляра(обьекта) данного класса
+	public Message(String from, String to, String text) { //конструктор класу з параметрами (від кого, кому, вміст)
+		this.from = from; //ініціалізація поля класу за аргументом створеного екземпляра (об'єкта) цього класу
 		this.to = to;
 		this.text = text;
 	}
 
-	public String toJSON() { //метод преобразует к виду json-строке
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create(); //строем Gson с применением паттерна
-		//setDateFormat("yyyy-MM-dd HH:mm:ss"), по которому будут сериализоваться сообщения
-		return gson.toJson(this); //преобразуем gson в json по текущему обьекту (сериализуем)
+	public String toJSON() { //метод для перетворення об'єкта в формат JSON
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create(); //створюємо Gson з використанням патерну
+		//setDateFormat("yyyy-MM-dd HH:mm:ss"), за яким будуть серіалізуватися повідомлення
+		return gson.toJson(this); //перетворюємо gson в JSON за поточним об'єктом (серіалізація)
 	}
 
-	public static Message fromJSON(String s) {//метод на вход получает строку, преобразует из json'a
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create(); //строем Gson с применением паттерна
-		//setDateFormat("yyyy-MM-dd HH:mm:ss"), по которому будут десериализоваться сообщения
-		return gson.fromJson(s, Message.class); //из строки s десериализуем обьект Message
+	public static Message fromJSON(String s) { //метод на вході отримує рядок, перетворює з формату JSON
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create(); //створюємо Gson з використанням патерну
+		//setDateFormat("yyyy-MM-dd HH:mm:ss"), за яким будуть десеріалізуватися повідомлення
+		return gson.fromJson(s, Message.class); //з рядка s десеріалізуємо об'єкт Message
 	}
 
 	@Override
-	public String toString() { //формируем возвращаемый вид сообщения на консоль(чат)
+	public String toString() { //формуємо формат виведення повідомлення в консоль (чат)
 		return new StringBuilder().append("[").append(date)
 				.append(", From: ").append(from).append(", To: ").append(to)
 				.append("] ").append(text)
 				.toString();
 	}
 
-	public int send(String url) throws IOException {
-		//используется стандартный библиотечный класс HttpURLConnection - самый простой HTTP-client, кот.позволяет
-		// делать запросы у HTTP
-		URL obj = new URL(url); //строку-адресURL заворачиваем в URL-обьект
-		HttpURLConnection conn = (HttpURLConnection) obj.openConnection(); //открываем соединение по протоколу HTTP
+	public int send(String url) throws IOException { //метод для відправлення повідомлення через HTTP
+		//використовується стандартний бібліотечний клас HttpURLConnection - найпростіший HTTP-клієнт, який дозволяє
+		// робити запити через HTTP
+		URL obj = new URL(url); //рядок-адреса URL завертається в об'єкт URL
+		HttpURLConnection conn = (HttpURLConnection) obj.openConnection(); //відкриваємо з'єднання по протоколу HTTP
 
-		conn.setRequestMethod("POST"); //указываем что у нас будет POST-запрос
-		conn.setDoOutput(true); //указываем, что запрос будет с данными
+		conn.setRequestMethod("POST"); //вказуємо, що це буде POST-запит
+		conn.setDoOutput(true); //вказуємо, що запит буде містити дані
 
-		try (OutputStream os = conn.getOutputStream()) { //у коннекшина получаем getOutputStream()
-			String json = toJSON(); //текущее сообщение-toJSON() преобразуем к строке String json
-			os.write(json.getBytes(StandardCharsets.UTF_8)); //преобразованную строку пишем в OutputStream os
-			return conn.getResponseCode(); // 200? //возвращаем statusCode, если 200 ОК - то хорошо, если нет - то метод
-			//main выдаст исключение
+		try (OutputStream os = conn.getOutputStream()) { //отримуємо OutputStream від з'єднання
+			String json = toJSON(); //поточне повідомлення перетворюємо у формат JSON
+			os.write(json.getBytes(StandardCharsets.UTF_8)); //записуємо перетворену строку у OutputStream
+			return conn.getResponseCode(); //повертаємо код відповіді (200 - OK, якщо помилка - викликається виключення)
 		}
+	     }
 	}
 
-	//Геттеры/Сеттеры
+	// Гетери/Сетери
 	public Date getDate() {
 		return date;
 	}
